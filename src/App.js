@@ -1,26 +1,28 @@
 // https://react-hook-form.com/jp/get-started
-// 制御された Input
+// エラーを処理する
 
-import Select from 'react-select';
-import { useForm, Controller } from 'react-hook-form';
-import { TextField, Checkbox } from '@material-ui/core';
+import { useForm } from 'react-hook-form';
 
-const App = () => {
-  const { handleSubmit, control, reset } = useForm();
-  const onSubmit = (data) => console.log(data);
+export default function App() {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+
+  const onSubmit = (data) => {
+    alert(JSON.stringify(data));
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Controller
-        name="MyCheckbox"
-        control={control}
-        defaultValue={false}
-        rules={{ required: true }}
-        render={({ field }) => <Checkbox {...field} />}
-      />
+      <input {...register('firstName', { required: true })} />
+      {errors.firstName?.type === 'required' && 'First name is required'}
+
+      <input {...register('lastName', { required: true })} />
+      {errors.lastName && 'Last name is required'}
+
       <input type="submit" />
     </form>
   );
-};
-
-export default App;
+}
