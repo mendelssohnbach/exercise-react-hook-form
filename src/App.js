@@ -1,40 +1,24 @@
 // https://react-hook-form.com/jp/get-started
-// UI ライブラリを使用
+// 制御された Input
 
 import Select from 'react-select';
 import { useForm, Controller } from 'react-hook-form';
-import Input from '@material-ui/core/Input';
+import { TextField, Checkbox } from '@material-ui/core';
 
 const App = () => {
-  const { control, handleSubmit } = useForm();
-
-  const onSubmit = (data) => {
-    alert(JSON.stringify(data));
-  };
+  const { handleSubmit, control, reset } = useForm();
+  const onSubmit = (data) => console.log(data);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Controller
-        name="firstName"
+        name="MyCheckbox"
         control={control}
-        defaultValue=""
-        render={({ field }) => <Input {...field} />}
+        defaultValue={false}
+        rules={{ required: true }}
+        render={({ field }) => <Checkbox {...field} />}
       />
-      <Controller
-        name="iceCreamType"
-        control={control}
-        render={({ field }) => (
-          <Select
-            {...field}
-            options={[
-              { value: 'chocolate', label: 'Chocolate' },
-              { value: 'strawberry', label: 'Strawberry' },
-              { value: 'vanilla', label: 'Vanilla' },
-            ]}
-          />
-        )}
-      />
-      <Input type="submit" />
+      <input type="submit" />
     </form>
   );
 };
