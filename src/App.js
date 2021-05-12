@@ -1,5 +1,5 @@
 // https://react-hook-form.com/jp/get-started
-// フィールドを登録する
+// バリデーションを適用する
 
 import { useForm } from 'react-hook-form';
 
@@ -9,13 +9,12 @@ export default function App() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register('firstName')} />
-      <select {...register('gender')}>
-        <option value="female">female</option>
-        <option value="male">male</option>
-        <option value="other">other</option>
-      </select>
-
+      {/* 必須かつ最大文字列長さ指定 */}
+      <input {...register('firstName', { required: true, maxLength: 20 })} />
+      {/* 正規表現ルール適用:アルファベット */}
+      <input {...register('lastName', { pattern: /^[A-Za-z]+$/i })} />
+      {/* 数値かつ最小値/最大値指定 */}
+      <input type="number" {...register('age', { min: 18, max: 99 })} />
       <input type="submit" />
     </form>
   );
