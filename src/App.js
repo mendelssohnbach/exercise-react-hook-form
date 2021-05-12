@@ -1,21 +1,42 @@
 // https://react-hook-form.com/jp/get-started
-// バリデーションを適用する
+// 既存のフォームに適用
 
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
-export default function App() {
+// The following component is an example of your existing Input Component
+const Input = ({ label, register, required }) => (
+  <>
+    <label>{label}</label>
+    <input {...register(label, { required })} />
+  </>
+);
+
+// また、React.forwardRefを使ってRefを渡すこともできます
+const Select = React.forwardRef(({ onChange, onBlur, name, label }, ref) => (
+  <>
+    <label>{label}</label>
+    <select name={name} ref={ref} onChange={onChange} onBlur={onBlur}>
+      <option value="20">20</option>
+      <option value="30">30</option>
+    </select>
+  </>
+));
+
+const App = () => {
   const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => console.log(data);
+
+  const onSubmit = (data) => {
+    alert(JSON.stringify(data));
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {/* 必須かつ最大文字列長さ指定 */}
-      <input {...register('firstName', { required: true, maxLength: 20 })} />
-      {/* 正規表現ルール適用:アルファベット */}
-      <input {...register('lastName', { pattern: /^[A-Za-z]+$/i })} />
-      {/* 数値かつ最小値/最大値指定 */}
-      <input type="number" {...register('age', { min: 18, max: 99 })} />
+      <Input label="First Name" register={register} required />
+      <Select label="Age" {...register('Age')} />
       <input type="submit" />
     </form>
   );
-}
+};
+
+export default App;
