@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+// https://react-hook-form.com/jp/get-started
+// 基本的な使用法
 
-function App() {
+import { useForm } from 'react-hook-form';
+
+export default function App() {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => console.log(data);
+
+  console.log(watch('example')); // 入力値の名前を渡して、入力値を監視する
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    /* "handleSubmit "は、"onSubmit "を呼び出す前に入力を検証します。" */
+    <form onSubmit={handleSubmit(onSubmit)}>
+      {/* "register "機能を使って、入力した内容をフックに登録します。 */}
+      <input defaultValue="test" {...register('example')} />
+
+      {/* 必須または他の標準的なHTML検証ルールによる検証を含む */}
+      <input {...register('exampleRequired', { required: true })} />
+      {/* フィールドの検証に失敗した場合、エラーを返します。  */}
+      {errors.exampleRequired && <span>This field is required</span>}
+
+      <input type="submit" />
+    </form>
   );
 }
-
-export default App;
